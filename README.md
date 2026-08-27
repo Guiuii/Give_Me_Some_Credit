@@ -1,46 +1,49 @@
 # Give_Me_Some_Credit
 
-## Описание
-Для решения задачи Give Me Some Credit с Kaggle были обучены различные модели: логистическая регрессия, XGBoost, CatBoost. Также для интерпретации работы модели были выделены топ-5 признаков, влияющих на прогноз и проведена оценка fairness модели
+## Description
 
-## Обзор задачи
-Необходимо решить задачу классификации заемщиков, целевая переменная - SeriousDlqin2yrs - лицо имело просроченную задолженность на 90 дней или более.
-В датасете представлены различные характеристики заемщиков:
-- **RevolvingUtilizationOfUnsecuredLines**. Общий баланс по кредитным картам и личным кредитным линиям, за исключением недвижимости и задолженности без рассрочки, например, автокредитов, деленный на сумму кредитных лимитов
-- **age**. Возраст заемщика в годах
-- **NumberOfTime30-59DaysPastDueNotWorse**. Количество раз, когда заемщик просрочил платеж на 30–59 дней, но не больше за последние 2 года.
-- **DebtRatio**. Ежемесячные выплаты по долгам, алименты, расходы на проживание, деленные на ежемесячный валовой доход
-- **MonthlyIncome**. Ежемесячный доход
-- **NumberOfOpenCreditLinesAndLoans**.Количество открытых кредитов (рассрочка, например, автокредит или ипотека) и кредитные линии (например, кредитные карты)
-- **NumberOfTimes90DaysLate**. Количество раз, когда заемщик просрочил платеж на 90 дней или более.
-- **NumberRealEstateLoansOrLines**. Количество ипотечных кредитов и кредитов на недвижимость, включая кредитные линии под залог жилья
-- **NumberOfTime60-89DaysPastDueNotWorse**. Количество раз, когда заемщик просрочил платеж на 60–89 дней, но не больше за последние 2 года.
-- **NumberOfDependents**. Количество иждивенцев в семье, за исключением себя (супруг(а), дети и т. д.)
+To solve the Give Me Some Credit task from Kaggle, various models were trained: logistic regression, XGBoost, CatBoost. Also, to interpret the model's performance, the top-5 features influencing the prediction were identified and the model's fairness was evaluated.
 
-### **В датасете наблюдается большой дисбаланс классов по целевой переменной:**
+## Task Overview
+
+It is necessary to solve the task of classifying borrowers, the target variable is SeriousDlqin2yrs - the person had a delinquent debt of 90 days or more.
+The dataset contains various borrower characteristics:
+
+* **RevolvingUtilizationOfUnsecuredLines**. Total balance on credit cards and personal lines of credit, excluding real estate and installment debt such as auto loans, divided by the sum of credit limits
+* **age**. Borrower's age in years
+* **NumberOfTime30-59DaysPastDueNotWorse**. Number of times the borrower has been 30–59 days past due, but no worse, in the last 2 years.
+* **DebtRatio**. Monthly debt payments, alimony, living expenses, divided by monthly gross income
+* **MonthlyIncome**. Monthly income
+* **NumberOfOpenCreditLinesAndLoans**. Number of open loans (installment loans, such as auto loans or mortgages) and credit lines (such as credit cards)
+* **NumberOfTimes90DaysLate**. Number of times the borrower has been 90 days or more past due.
+* **NumberRealEstateLoansOrLines**. Number of mortgage and real estate loans, including home equity lines of credit
+* **NumberOfTime60-89DaysPastDueNotWorse**. Number of times the borrower has been 60–89 days past due, but no worse, in the last 2 years.
+* **NumberOfDependents**. Number of dependents in the family, excluding themselves (spouse, children, etc.)
+
+### **There is a large class imbalance in the target variable in the dataset:**
 
 ![distr](plots/target_pie.png)
 
-### **Для оценки мультиколлинеарности признаков была построена матрица корреляции:**
+### **A correlation matrix was constructed to assess feature multicollinearity:**
 
 ![distr](plots/correlation.png)
 
-## Построение модели
-В качестве моделей были испробованы различные подходы: логистическая регресиия, XGBoost, CatBoost. Каждая из этих моделей дала схожие значения ROC-AUC~0.85. Однако логистическая регрессия с весами {0:1, 1:5} показала лучший precision из всех моделей (0.39), F1-score(0.43). Таким образом, логистическая регрессия лучше всех моделей справилась с проблемой дисбаланса классов.
+## Model Building
 
-### **ROC-кривая получившейся модели логистической регрессии:**
+Various approaches were tried as models: logistic regression, XGBoost, CatBoost. Each of these models showed similar ROC-AUC values of ~0.85. However, logistic regression with weights {0:1, 1:5} showed the best precision of all models (0.39), F1-score (0.43). Thus, logistic regression handled the class imbalance problem better than all other models.
 
-![roc_auc](plots/roc_auc_lr.png)
+### **ROC curve of the resulting logistic regression model:**
 
-### **Оценка важности признаков модели логистической регрессии:**
+![roc\_auc](plots/roc_auc_lr.png)
 
-![roc_auc](plots/feature_importances.png)
+### **Feature importance assessment of the logistic regression model:**
 
-## Интерпретация модели
-Также для модели логистической регрессии была проведена интерпретация и оценка fairness модели (на дискриминацию по тому или иному признаку).
+![roc\_auc](plots/feature_importances.png)
 
-### **Топ-5 важных признаков, влияющих на прогноз, были отобраны с помощью SHAP:**
+## Model Interpretation
+
+The logistic regression model was also interpreted and its fairness was evaluated (for discrimination based on a particular feature).
+
+### **The top-5 important features influencing the prediction were selected using SHAP:**
 
 ![shap](plots/shap_summary.png)
-
-
